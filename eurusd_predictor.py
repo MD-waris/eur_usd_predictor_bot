@@ -6,12 +6,6 @@ _capture_buffer = io.StringIO()
 _orig_stdout = sys.stdout
 sys.stdout = _capture_buffer
 # --- begin notebook code ---
-pip install ta==0.11.0
-pip install xgboost==3.0.5
-pip install requests==2.32.5
-pip install shap==0.48.0
-pip install scikit-optimize==0.10.2
-pip install scikit-learn==1.7.2
 
 ## predictor v2
 
