@@ -1,6 +1,8 @@
 numpy
 pandas
-requests
-scikit-learn
-ta
-xgboost
+requests==2.32.5
+scikit-learn==1.7.2
+ta==0.11.0
+xgboost==3.0.5
+shap==0.48.0
+scikit-optimize==0.10.2
