@@ -270,11 +270,15 @@ else:
 now = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 message = f"📊 EUR/USD Prediction Update\n\nTime: {now}\nResult: {last_line}"
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-CHAT_ID = os.getenv('CHAT_ID')
+CHAT_ID = os.getenv("CHAT_ID", "").split(",")
 if TELEGRAM_TOKEN and CHAT_ID:
     try:
         import requests
         url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+        for chat_id in CHAT_IDS:
+            chat_id = chat_id.strip()
+            if not chat_id:
+                continue
         params = {'chat_id': CHAT_ID, 'text': message}
         requests.get(url, params=params, timeout=15)
         print('✅ Telegram message sent.')
