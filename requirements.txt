@@ -2,6 +2,5 @@ numpy
 pandas
 requests
 scikit-learn
-sklearn
 ta
 xgboost
