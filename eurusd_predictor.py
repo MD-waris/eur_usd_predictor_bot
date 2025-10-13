@@ -275,7 +275,7 @@ if TELEGRAM_TOKEN and CHAT_ID:
     try:
         import requests
         url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-        for chat_id in CHAT_IDS:
+        for chat_id in CHAT_ID:
             chat_id = chat_id.strip()
             if not chat_id:
                 continue
