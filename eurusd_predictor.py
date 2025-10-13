@@ -267,7 +267,7 @@ if len(all_output) > 0:
     last_line = last_lines[-1] if last_lines else all_output[-1]
 else:
     last_line = "No output captured from the notebook."
-now = datetime.datetime.utcnow.astimezone(ist_timezone).strftime("%Y-%m-%d %H:%M IST")
+now = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 message = f"📊 EUR/USD Prediction Update\n\nTime: {now}\nResult: {last_line}"
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 CHAT_ID = os.getenv("CHAT_ID", "").split(",")
