@@ -261,33 +261,45 @@ try:
     all_output = _capture_buffer.getvalue().strip().splitlines()
 except Exception as e:
     all_output = ["[error capturing output] " + str(e)]
+
 if len(all_output) > 0:
     # choose the last non-empty printed line
-    last_lines = [ln for ln in all_output if ln.strip()!='']
+    last_lines = [ln for ln in all_output if ln.strip() != ""]
     last_line = last_lines[-1] if last_lines else all_output[-1]
 else:
     last_line = "No output captured from the notebook."
+
 now = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 message = f"📊 EUR/USD Prediction Update\n\nTime: {now}\nResult: {last_line}"
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-CHAT_ID = os.getenv("CHAT_ID", "").split(",")
+
+import os, sys, traceback, requests
+
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID", "")  # 👈 uses your existing secret name
+
 if TELEGRAM_TOKEN and CHAT_ID:
     try:
-        import requests
         url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-        for chat_id in CHAT_ID:
-            chat_id = chat_id.strip()
-            if not chat_id:
-                continue
-        params = {'chat_id': CHAT_ID, 'text': message}
-        requests.get(url, params=params, timeout=15)
-        print('✅ Telegram message sent.')
+        chat_ids = [cid.strip() for cid in CHAT_ID.split(",") if cid.strip()]
+        sent_count = 0
+
+        for chat_id in chat_ids:
+            params = {"chat_id": chat_id, "text": message}
+            r = requests.get(url, params=params, timeout=15)
+            if r.ok:
+                sent_count += 1
+                print(f"✅ Message sent to {chat_id}")
+            else:
+                print(f"⚠️ Failed to send to {chat_id}: {r.text}")
+
+        print(f"📨 Done. Sent to {sent_count} chats total.")
     except Exception as e:
-        print('❌ Failed to send Telegram message:', e, file=sys.stderr)
+        print("❌ Failed to send Telegram message:", e, file=sys.stderr)
         traceback.print_exc()
 else:
-    print('⚠️ TELEGRAM_TOKEN or CHAT_ID not set. Message not sent.')
-    print('Captured output:')
+    print("⚠️ TELEGRAM_TOKEN or CHAT_ID not set. Message not sent.")
+    print("Captured output:")
     print(last_line)
-print('\n--- Full captured notebook stdout ---')
+
+print("\n--- Full captured notebook stdout ---")
 print(_capture_buffer.getvalue())
