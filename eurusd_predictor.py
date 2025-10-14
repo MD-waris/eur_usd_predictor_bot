@@ -269,13 +269,18 @@ if len(all_output) > 0:
 else:
     last_line = "No output captured from the notebook."
 
-now = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-message = f"📊 EUR/USD Prediction Update\n\nTime: {now}\nResult: {last_line}"
+# ---- 🕒 Use IST time (India Standard Time) for accurate logs ----
+import datetime, pytz, os, sys, traceback, requests
 
-import os, sys, traceback, requests
+ist = pytz.timezone("Asia/Kolkata")
+now_ist = datetime.datetime.now(ist).strftime("%Y-%m-%d %I:%M %p IST")
 
+message = f"📊 EUR/USD Prediction Update\n\nTime: {now_ist}\nResult: {last_line}"
+
+# ---- 🔐 Telegram setup ----
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-CHAT_ID = os.getenv("CHAT_ID", "")  # 👈 uses your existing secret name
+#CHAT_ID = os.getenv("CHAT_ID", "")  # single secret with comma-separated IDs
+CHAT_ID = 753303744
 
 if TELEGRAM_TOKEN and CHAT_ID:
     try:
@@ -288,16 +293,16 @@ if TELEGRAM_TOKEN and CHAT_ID:
             r = requests.get(url, params=params, timeout=15)
             if r.ok:
                 sent_count += 1
-                print(f"✅ Message sent to {chat_id}")
+                print(f"✅ [{now_ist}] Message sent to {chat_id}")
             else:
-                print(f"⚠️ Failed to send to {chat_id}: {r.text}")
+                print(f"⚠️ [{now_ist}] Failed to send to {chat_id}: {r.text}")
 
-        print(f"📨 Done. Sent to {sent_count} chats total.")
+        print(f"📨 [{now_ist}] Done. Sent to {sent_count} chats total.")
     except Exception as e:
-        print("❌ Failed to send Telegram message:", e, file=sys.stderr)
+        print(f"❌ [{now_ist}] Failed to send Telegram message:", e, file=sys.stderr)
         traceback.print_exc()
 else:
-    print("⚠️ TELEGRAM_TOKEN or CHAT_ID not set. Message not sent.")
+    print(f"⚠️ [{now_ist}] TELEGRAM_TOKEN or CHAT_ID not set. Message not sent.")
     print("Captured output:")
     print(last_line)
 
