@@ -2,7 +2,7 @@ name: EURUSD Predictor Bot
 
 on:
    schedule:
-     - cron: "00 5-16 * * 1-5"   # runs every hour at minute 0
+     - cron: "28 4-15 * * 1-5"   # runs every hour at minute 0
      
    workflow_dispatch:      # manual trigger
 
