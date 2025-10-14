@@ -280,7 +280,7 @@ message = f"📊 EUR/USD Prediction Update\n\nTime: {now_ist}\nResult: {last_lin
 # ---- 🔐 Telegram setup ----
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 #CHAT_ID = os.getenv("CHAT_ID", "")  # single secret with comma-separated IDs
-CHAT_ID = 753303744
+CHAT_ID = 753303744,1234567
 
 if TELEGRAM_TOKEN and CHAT_ID:
     try:
